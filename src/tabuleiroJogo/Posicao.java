@@ -1,9 +1,13 @@
-package tabuleiro;
+package tabuleiroJogo;
 
 public class Posicao {
 
 	private int linha;
 	private int coluna;
+
+	public Posicao() {
+
+	}
 
 	public Posicao(int linha, int coluna) {
 		this.linha = linha;
@@ -28,6 +32,10 @@ public class Posicao {
 	public void setColuna(int coluna) {
 		this.coluna = coluna;
 
+	}
+
+	public static String avisaUsuario() {
+		return "AVISO DE ERRO";
 	}
 
 	// Imprimir a posicao na tela
