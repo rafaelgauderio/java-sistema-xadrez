@@ -1,6 +1,9 @@
 package xadrez;
 
 import tabuleiroJogo.Tabuleiro;
+import tabuleiroJogo.Posicao;
+import xadrez.pecas.Rei;
+import xadrez.pecas.Torre;
 
 //Classe onde ficam as regras do jogo de Xadrez
 public class PartidaDeXadrez {
@@ -10,6 +13,7 @@ public class PartidaDeXadrez {
 	public PartidaDeXadrez() {
 
 		tabuleiro = new Tabuleiro(8, 8);
+		FormacaoInicial();
 
 	}
 
@@ -21,6 +25,15 @@ public class PartidaDeXadrez {
 			}
 		}
 		return matriz;
+	}
+
+	public void FormacaoInicial() {
+
+		tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.BRANCO), new Posicao(2, 2));
+		tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.PRETO), new Posicao(0, 5));
+		tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.BRANCO), new Posicao(7, 4));
+		
+
 	}
 
 }

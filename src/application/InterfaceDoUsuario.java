@@ -14,13 +14,13 @@ public class InterfaceDoUsuario {
 			System.out.println();
 		}
 
-		System.out.println("  a b c d e f g h");
+		System.out.println("   a   b   c   d   e   f   g   h  ");
 
 	}
 
 	private static void imprimirPeca(PecaDeXadrez peca) {
 		if (peca == null) {
-			System.out.print("-");
+			System.out.print("---");
 		} else {
 			System.out.print(peca);
 		}
