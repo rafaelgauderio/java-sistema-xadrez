@@ -1,13 +1,12 @@
 package application;
 
-import tabuleiroJogo.Posicao;
-import tabuleiroJogo.Tabuleiro;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
+import xadrez.ExcecaoDoXadrez;
 import xadrez.PartidaDeXadrez;
 import xadrez.PecaDeXadrez;
 import xadrez.PosicaoNoXadrez;
-
-import java.util.Scanner;
 
 public class Program {
 
@@ -22,17 +21,33 @@ public class Program {
 
 		PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez();
 		while (true) {
-			InterfaceDoUsuario.imprimirTabuleiro(partidaDeXadrez.getPecas());
-			System.out.println();
-			System.out.println("Origem: ");
-			PosicaoNoXadrez origem = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
-			
-			System.out.println();
-			System.out.println("Destino: ");
-			
-			PosicaoNoXadrez destino = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
+			try {
+				
+				InterfaceDoUsuario.limparTela();
+				InterfaceDoUsuario.imprimirTabuleiro(partidaDeXadrez.getPecas());
+				System.out.println();
+				System.out.println("Origem: ");
+				PosicaoNoXadrez origem = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
 
-			PecaDeXadrez pecaCapturada = partidaDeXadrez.realizarMovimentoDeXadrez(origem, destino);
+				System.out.println();
+				System.out.println("Destino: ");
+
+				PosicaoNoXadrez destino = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
+
+				PecaDeXadrez pecaCapturada = partidaDeXadrez.realizarMovimentoDeXadrez(origem, destino);
+
+			} catch (ExcecaoDoXadrez erro) {
+
+				System.out.println(erro.getMessage());
+				System.out.println("Pressione ENTER para continuar!");
+				sc.nextLine();
+			} catch (InputMismatchException erro) {
+				System.out.println(erro.getMessage());
+				System.out.println("Pressione ENTER para continuar!");
+				sc.nextLine();
+
+			}
+
 		}
 
 	}
