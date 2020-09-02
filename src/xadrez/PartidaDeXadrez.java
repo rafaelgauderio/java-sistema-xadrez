@@ -7,7 +7,7 @@ import xadrez.pecas.Torre;
 
 //Classe onde ficam as regras do jogo de Xadrez
 public class PartidaDeXadrez {
-
+	
 	private Tabuleiro tabuleiro;
 
 	public PartidaDeXadrez() {
@@ -34,10 +34,21 @@ public class PartidaDeXadrez {
 	public void FormacaoInicial() {
 
 		lugarNovoPeca('b', 6, new Torre(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('e', 8, new Rei(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('e', 1, new Rei(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('g', 1, new Torre(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('c', 2, new Torre(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('c', 3, new Torre(tabuleiro, Cor.BRANCO));
 
+		lugarNovoPeca('e', 8, new Rei(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('c', 8, new Torre(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('b', 8, new Torre(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('h', 3, new Torre(tabuleiro, Cor.PRETO));
+		
+		/* Para poder imprimir o console colorido
+		 * abre um git bash na pasta bin do projeto e executa a classe principal do Programa
+		 * # java application/Program 
+		 */
+		
 		/*
 		 * tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.BRANCO), new Posicao(2, 2));
 		 * tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.PRETO), new Posicao(4, 3));
