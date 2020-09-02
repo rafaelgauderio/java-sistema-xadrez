@@ -2,12 +2,13 @@ package xadrez;
 
 import tabuleiroJogo.Tabuleiro;
 import tabuleiroJogo.Posicao;
+import tabuleiroJogo.Peca;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
 //Classe onde ficam as regras do jogo de Xadrez
 public class PartidaDeXadrez {
-	
+
 	private Tabuleiro tabuleiro;
 
 	public PartidaDeXadrez() {
@@ -27,8 +28,33 @@ public class PartidaDeXadrez {
 		return matriz;
 	}
 
+	public PecaDeXadrez realizarMovimentoDeXadrez(PosicaoNoXadrez posicaoOrigem, PosicaoNoXadrez posicaoDestino) {
+		Posicao origem = posicaoOrigem.ParaPosicaoDoXadrez();
+		Posicao destino = posicaoDestino.ParaPosicaoDoXadrez();
+		validarPosicaoOrigem(origem);
+		Peca pecaCapturada = realizarMovimento(origem, destino);
+
+		return (PecaDeXadrez) pecaCapturada;
+	}
+	
+	private Peca realizarMovimento(Posicao origem, Posicao destino) {
+		Peca p = tabuleiro.removerPeca(origem);
+		Peca pecaCapturada = tabuleiro.removerPeca(destino);
+		tabuleiro.lugarDaPeca(p, destino);
+		return pecaCapturada;
+	}
+
+	private void validarPosicaoOrigem(Posicao posicao) {
+		if (!tabuleiro.jaTemUmaPeca(posicao)) {
+			throw new ExcecaoDoXadrez("Ainda não há peça nessa posição");
+
+		}
+	}
+
+	
+
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
-		tabuleiro.lugarDaPeca(peca, new PosicaoNoChadrez(coluna, linha).ParaPosicaoDoXadrez());
+		tabuleiro.lugarDaPeca(peca, new PosicaoNoXadrez(coluna, linha).ParaPosicaoDoXadrez());
 	}
 
 	public void FormacaoInicial() {
@@ -43,12 +69,12 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('c', 8, new Torre(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('b', 8, new Torre(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('h', 3, new Torre(tabuleiro, Cor.PRETO));
-		
-		/* Para poder imprimir o console colorido
-		 * abre um git bash na pasta bin do projeto e executa a classe principal do Programa
-		 * # java application/Program 
+
+		/*
+		 * Para poder imprimir o console colorido abre um git bash na pasta bin do
+		 * projeto e executa a classe principal do Programa # java application/Program
 		 */
-		
+
 		/*
 		 * tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.BRANCO), new Posicao(2, 2));
 		 * tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.PRETO), new Posicao(4, 3));

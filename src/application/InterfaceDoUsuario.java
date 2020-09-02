@@ -1,12 +1,16 @@
 package application;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import xadrez.Cor;
 import xadrez.PecaDeXadrez;
+import xadrez.PosicaoNoXadrez;
 
 public class InterfaceDoUsuario {
-	
-	//https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
-	
+
+	// https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
+
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
@@ -25,7 +29,23 @@ public class InterfaceDoUsuario {
 	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-	
+
+	public static PosicaoNoXadrez lerPosicaoNoXadrez(Scanner sc) {
+
+		try {
+			String string = sc.nextLine();
+			char coluna = string.charAt(0);
+			// recortando o segundo caracter da termo a1, h8
+			int linha = Integer.parseInt(string.substring(1));
+			return new PosicaoNoXadrez(coluna, linha);
+
+		}
+
+		catch (RuntimeException erro) {
+			throw new InputMismatchException("ERRO lindo Posição do Xadrez");
+		}
+
+	}
 
 	public static void imprimirTabuleiro(PecaDeXadrez[][] pecas) {
 
@@ -44,13 +64,11 @@ public class InterfaceDoUsuario {
 	private static void imprimirPeca(PecaDeXadrez peca) {
 		if (peca == null) {
 			System.out.print("---");
-		} 
-		else {
-			
+		} else {
+
 			if (peca.getCor() == Cor.BRANCO) {
 				System.out.print(ANSI_WHITE + peca + ANSI_RESET);
-			}
-			else {
+			} else {
 				System.out.print(ANSI_YELLOW + peca + ANSI_RESET);
 			}
 		}

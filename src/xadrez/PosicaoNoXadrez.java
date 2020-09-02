@@ -1,17 +1,16 @@
 package xadrez;
 
 import tabuleiroJogo.Posicao;
-import tabuleiroJogo.Posicao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
-public class PosicaoNoChadrez {
+public class PosicaoNoXadrez {
 
 	// no chadrez se usa primeiro a coluna e depois a linha
 	private char coluna;
 	private int linha;
 
-	public PosicaoNoChadrez(char coluna, int linha) {
+	public PosicaoNoXadrez(char coluna, int linha) {
 		if (coluna < 'a' || coluna > 'h' || linha < 1 || linha > 8) {
 			throw new ExcecaoDoXadrez("ERRO inicializando Posição do Xadrez. Valores validos são entre a1 até h8");
 
@@ -34,8 +33,8 @@ public class PosicaoNoChadrez {
 		return new Posicao(8 - linha, coluna - 'a');
 	}
 
-	protected static PosicaoNoChadrez DaPosicaoDoXadrez(Posicao posicao) {
-		return new PosicaoNoChadrez((char) ('a' - posicao.getColuna()), 8 - posicao.getLinha());
+	protected static PosicaoNoXadrez DaPosicaoDoXadrez(Posicao posicao) {
+		return new PosicaoNoXadrez((char) ('a' - posicao.getColuna()), 8 - posicao.getLinha());
 	}
 
 	@Override
