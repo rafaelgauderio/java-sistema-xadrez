@@ -27,12 +27,23 @@ public class PartidaDeXadrez {
 		return matriz;
 	}
 
+	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
+		tabuleiro.lugarDaPeca(peca, new PosicaoNoChadrez(coluna, linha).ParaPosicaoDoXadrez());
+	}
+
 	public void FormacaoInicial() {
 
-		tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.BRANCO), new Posicao(2, 2));
-		tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.PRETO), new Posicao(4, 3));
-		tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.BRANCO), new Posicao(7, 4));
-		tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.PRETO), new Posicao(7, 3));
+		lugarNovoPeca('b', 6, new Torre(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('e', 8, new Rei(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('e', 1, new Rei(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('g', 1, new Torre(tabuleiro, Cor.BRANCO));
+
+		/*
+		 * tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.BRANCO), new Posicao(2, 2));
+		 * tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.PRETO), new Posicao(4, 3));
+		 * tabuleiro.lugarDaPeca(new Rei(tabuleiro, Cor.BRANCO), new Posicao(7, 4));
+		 * tabuleiro.lugarDaPeca(new Torre(tabuleiro, Cor.PRETO), new Posicao(7, 3));
+		 */
 
 	}
 
