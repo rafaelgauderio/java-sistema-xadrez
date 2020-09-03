@@ -36,7 +36,7 @@ public class PartidaDeXadrez {
 
 		return (PecaDeXadrez) pecaCapturada;
 	}
-	
+
 	private Peca realizarMovimento(Posicao origem, Posicao destino) {
 		Peca p = tabuleiro.removerPeca(origem);
 		Peca pecaCapturada = tabuleiro.removerPeca(destino);
@@ -46,12 +46,15 @@ public class PartidaDeXadrez {
 
 	private void validarPosicaoOrigem(Posicao posicao) {
 		if (!tabuleiro.jaTemUmaPeca(posicao)) {
-			throw new ExcecaoDoXadrez("Ainda não há peça nessa posição");
+			throw new ExcecaoDoXadrez("Ainda não há peça nessa posição!");
 
 		}
-	}
 
-	
+		if (!tabuleiro.peca(posicao).existeAlgumMovimentoPossivel()) {
+			throw new ExcecaoDoXadrez("Não exite nenhum movimento possível para essa peça!");
+		}
+
+	}
 
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
 		tabuleiro.lugarDaPeca(peca, new PosicaoNoXadrez(coluna, linha).ParaPosicaoDoXadrez());
