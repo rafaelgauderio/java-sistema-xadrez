@@ -32,6 +32,7 @@ public class PartidaDeXadrez {
 		Posicao origem = posicaoOrigem.ParaPosicaoDoXadrez();
 		Posicao destino = posicaoDestino.ParaPosicaoDoXadrez();
 		validarPosicaoOrigem(origem);
+		validarPosicaoDestino(origem, destino);
 		Peca pecaCapturada = realizarMovimento(origem, destino);
 
 		return (PecaDeXadrez) pecaCapturada;
@@ -54,6 +55,12 @@ public class PartidaDeXadrez {
 			throw new ExcecaoDoXadrez("Não exite nenhum movimento possível para essa peça!");
 		}
 
+	}
+
+	private void validarPosicaoDestino(Posicao origem, Posicao destino) {
+		if (!tabuleiro.peca(origem).movimentoPossivel(destino) == true) {
+			throw new ExcecaoDoXadrez("A peça escolhida não pode se movimentar para essa posição de destino");
+		}
 	}
 
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {

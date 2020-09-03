@@ -33,7 +33,7 @@ public class PosicaoNoXadrez {
 		return new Posicao(8 - linha, coluna - 'a');
 	}
 
-	protected static PosicaoNoXadrez DaPosicaoDoXadrez(Posicao posicao) {
+	protected static PosicaoNoXadrez DaPosicaoDoXadre(Posicao posicao) {
 		return new PosicaoNoXadrez((char) ('a' - posicao.getColuna()), 8 - posicao.getLinha());
 	}
 
