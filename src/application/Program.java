@@ -29,9 +29,13 @@ public class Program {
 				System.out.println("Origem: ");
 				PosicaoNoXadrez origem = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
 
+				boolean [][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
+				InterfaceDoUsuario.limparTela();
+				//sobrecarga do do metodo de imprimir o tabuleiro, mas agora com todas as possicoes possiveis
+				//e com o fundo colorido
+				InterfaceDoUsuario.imprimirTabuleiro(partidaDeXadrez.getPecas(), movimentosPossiveis);
 				System.out.println();
 				System.out.println("Destino: ");
-
 				PosicaoNoXadrez destino = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
 
 				PecaDeXadrez pecaCapturada = partidaDeXadrez.realizarMovimentoDeXadrez(origem, destino);

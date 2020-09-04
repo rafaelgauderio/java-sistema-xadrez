@@ -28,6 +28,13 @@ public class PartidaDeXadrez {
 		return matriz;
 	}
 
+	public boolean[][] movimentosPossiveis(PosicaoNoXadrez posicaoOrigem) {
+		Posicao posicao = posicaoOrigem.ParaPosicaoDoXadrez();
+		validarPosicaoOrigem(posicao);
+		return tabuleiro.peca(posicao).movimentosPossiveis();
+
+	}
+
 	public PecaDeXadrez realizarMovimentoDeXadrez(PosicaoNoXadrez posicaoOrigem, PosicaoNoXadrez posicaoDestino) {
 		Posicao origem = posicaoOrigem.ParaPosicaoDoXadrez();
 		Posicao destino = posicaoDestino.ParaPosicaoDoXadrez();
@@ -58,7 +65,7 @@ public class PartidaDeXadrez {
 	}
 
 	private void validarPosicaoDestino(Posicao origem, Posicao destino) {
-		if (!tabuleiro.peca(origem).movimentoPossivel(destino) == true) {
+		if (!tabuleiro.peca(origem).movimentoPossivel(destino)) {
 			throw new ExcecaoDoXadrez("A peça escolhida não pode se movimentar para essa posição de destino");
 		}
 	}
