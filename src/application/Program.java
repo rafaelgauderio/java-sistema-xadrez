@@ -7,6 +7,8 @@ import xadrez.ExcecaoDoXadrez;
 import xadrez.PartidaDeXadrez;
 import xadrez.PecaDeXadrez;
 import xadrez.PosicaoNoXadrez;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Program {
 
@@ -18,21 +20,23 @@ public class Program {
 		 */
 
 		Scanner sc = new Scanner(System.in);
-
 		PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez();
+		List<PecaDeXadrez> capturada = new ArrayList<PecaDeXadrez>();
+
 		while (true) {
 			try {
-				
+
 				InterfaceDoUsuario.limparTela();
-				InterfaceDoUsuario.imprimirPartida(partidaDeXadrez);
+				InterfaceDoUsuario.imprimirPartida(partidaDeXadrez, capturada);
 				System.out.println();
 				System.out.println("Origem: ");
 				PosicaoNoXadrez origem = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);
 
-				boolean [][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
+				boolean[][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
 				InterfaceDoUsuario.limparTela();
-				//sobrecarga do do metodo de imprimir o tabuleiro, mas agora com todas as possicoes possiveis
-				//e com o fundo colorido
+				// sobrecarga do do metodo de imprimir o tabuleiro, mas agora com todas as
+				// possicoes possiveis
+				// e com o fundo colorido
 				InterfaceDoUsuario.imprimirTabuleiro(partidaDeXadrez.getPecas(), movimentosPossiveis);
 				System.out.println();
 				System.out.println("Destino: ");
@@ -40,10 +44,14 @@ public class Program {
 
 				PecaDeXadrez pecaCapturada = partidaDeXadrez.realizarMovimentoDeXadrez(origem, destino);
 
+				if (pecaCapturada != null) {
+					capturada.add(pecaCapturada);
+				}
+
 			} catch (ExcecaoDoXadrez erro) {
 
 				System.out.println(erro.getMessage());
-				System.out.println("Pressione ENTER para continuar!");
+				System.out.println("ENTER para continuar!");
 				sc.nextLine();
 			} catch (InputMismatchException erro) {
 				System.out.println(erro.getMessage());

@@ -5,6 +5,8 @@ import tabuleiroJogo.Posicao;
 import tabuleiroJogo.Peca;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
+import java.util.ArrayList;
+import java.util.List;
 
 //Classe onde ficam as regras do jogo de Xadrez
 public class PartidaDeXadrez {
@@ -12,6 +14,8 @@ public class PartidaDeXadrez {
 	private int turno;
 	private Cor jogadorDaVez;
 	private Tabuleiro tabuleiro;
+	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
+	private List<Peca> pecasCapturadas = new ArrayList<>();
 
 	public PartidaDeXadrez() {
 
@@ -63,6 +67,12 @@ public class PartidaDeXadrez {
 		Peca p = tabuleiro.removerPeca(origem);
 		Peca pecaCapturada = tabuleiro.removerPeca(destino);
 		tabuleiro.lugarDaPeca(p, destino);
+
+		if (pecaCapturada != null) {
+			pecasNoTabuleiro.remove(pecaCapturada);
+			pecasCapturadas.add(pecaCapturada);
+		}
+
 		return pecaCapturada;
 	}
 
@@ -71,11 +81,12 @@ public class PartidaDeXadrez {
 			throw new ExcecaoDoXadrez("Não há peça nessa posição!");
 
 		}
-		
-		if (jogadorDaVez != ((PecaDeXadrez)tabuleiro.peca(posicao)).getCor()   ) {
-			
-			throw new ExcecaoDoXadrez ("A peça escolhida não é sua. Escolha uma peça: " + (jogadorDaVez == Cor.BRANCO ? Cor.BRANCO : Cor.PRETO) );
-			
+
+		if (jogadorDaVez != ((PecaDeXadrez) tabuleiro.peca(posicao)).getCor()) {
+
+			throw new ExcecaoDoXadrez("A peça escolhida não é sua. Escolha uma peça "
+					+ (jogadorDaVez == Cor.BRANCO ? Cor.BRANCO : Cor.PRETO));
+
 		}
 
 		if (!tabuleiro.peca(posicao).existeAlgumMovimentoPossivel()) {
@@ -89,15 +100,16 @@ public class PartidaDeXadrez {
 			throw new ExcecaoDoXadrez("A peça escolhida não pode se movimentar para essa posição de destino");
 		}
 	}
-	
-	private void proximoTurno () {
+
+	private void proximoTurno() {
 		turno++;
 		jogadorDaVez = (jogadorDaVez == Cor.BRANCO) ? Cor.PRETO : Cor.BRANCO;
 	}
-	
 
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
 		tabuleiro.lugarDaPeca(peca, new PosicaoNoXadrez(coluna, linha).ParaPosicaoDoXadrez());
+		pecasNoTabuleiro.add(peca);
+
 	}
 
 	public void FormacaoInicial() {
