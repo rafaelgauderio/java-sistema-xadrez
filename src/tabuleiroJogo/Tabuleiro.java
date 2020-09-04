@@ -51,7 +51,7 @@ public class Tabuleiro {
 
 	public void lugarDaPeca(Peca peca, Posicao posicao) {
 		if (jaTemUmaPeca(posicao)) {
-			throw new ExcecaoDoTabuleiro("Já existe um peça na posicao " + posicao);
+			throw new ExcecaoDoTabuleiro("Já existe uma peça na posicao " + posicao);
 		}
 		pecas[posicao.getLinha()][posicao.getColuna()] = peca;
 		peca.posicao = posicao;
@@ -59,7 +59,7 @@ public class Tabuleiro {
 
 	public Peca removerPeca(Posicao posicao) {
 		if (!posicaoExiste(posicao)) {
-			throw new ExcecaoDoTabuleiro("Posição não existe nop tabuleiro!");
+			throw new ExcecaoDoTabuleiro("Posição não existe no tabuleiro!");
 		}
 		if (peca(posicao) == null) {
 			return null;

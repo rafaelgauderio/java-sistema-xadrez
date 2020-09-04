@@ -6,6 +6,7 @@ import java.util.Scanner;
 import xadrez.Cor;
 import xadrez.PecaDeXadrez;
 import xadrez.PosicaoNoXadrez;
+import xadrez.PartidaDeXadrez;
 
 public class InterfaceDoUsuario {
 
@@ -49,12 +50,17 @@ public class InterfaceDoUsuario {
 		}
 
 		catch (RuntimeException erro) {
-			throw new InputMismatchException("ERRO lindo Posição do Xadrez");
+			throw new InputMismatchException("ERRO lendo Posição do Xadrez");
 		}
 
 	}
-	
-	
+
+	public static void imprimirPartida(PartidaDeXadrez partidaDeXadrez) {
+		imprimirTabuleiro(partidaDeXadrez.getPecas());
+		System.out.println();
+		System.out.println("Turno : " + partidaDeXadrez.getTurno());
+		System.out.println("Aguardando jogador: " + partidaDeXadrez.getJogadorDaVez());
+	}
 
 	public static void imprimirTabuleiro(PecaDeXadrez[][] pecas) {
 		System.out.println();

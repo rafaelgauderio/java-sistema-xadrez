@@ -21,52 +21,52 @@ public class Torre extends xadrez.PecaDeXadrez {
 	public boolean[][] movimentosPossiveis() {
 		boolean[][] matriz = new boolean[getTabuleiro().getLinhas()][getTabuleiro().getColunas()];
 
-		Posicao peca = new Posicao(0, 0);
+		Posicao pos = new Posicao(0, 0);
 
 		// Para Cimac3
-		peca.setarValores(posicao.getLinha() - 1, posicao.getColuna());
-		while (getTabuleiro().posicaoExiste(peca) && !getTabuleiro().jaTemUmaPeca(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
-			peca.setLinha(peca.getLinha() - 1);
+		pos.setarValores(posicao.getLinha() - 1, posicao.getColuna());
+		while (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
+			pos.setLinha(pos.getLinha() - 1);
 
 		}
-		if (getTabuleiro().posicaoExiste(peca) && existeAquiUmaPecaAdversaria(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
+		if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
 		}
 
 		// Para Baixo
-		peca.setarValores(posicao.getLinha() + 1, posicao.getColuna());
-		while (getTabuleiro().posicaoExiste(peca) && !getTabuleiro().jaTemUmaPeca(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
-			peca.setLinha(peca.getLinha() + 1);
+		pos.setarValores(posicao.getLinha() + 1, posicao.getColuna());
+		while (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
+			pos.setLinha(pos.getLinha() + 1);
 		}
 
-		if (getTabuleiro().posicaoExiste(peca) && existeAquiUmaPecaAdversaria(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
+		if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
 		}
 
 		// para esquerda
 
-		peca.setarValores(posicao.getLinha(), posicao.getColuna() - 1);
-		while (getTabuleiro().posicaoExiste(peca) && !getTabuleiro().jaTemUmaPeca(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
-			peca.setColuna(peca.getColuna() - 1);
+		pos.setarValores(posicao.getLinha(), posicao.getColuna() - 1);
+		while (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
+			pos.setColuna(pos.getColuna() - 1);
 		}
 
-		if (getTabuleiro().posicaoExiste(peca) && existeAquiUmaPecaAdversaria(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
+		if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
 		}
 
 		// para direita
 
-		peca.setarValores(posicao.getLinha(), posicao.getColuna() + 1);
-		while (getTabuleiro().posicaoExiste(peca) && !getTabuleiro().jaTemUmaPeca(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
-			peca.setColuna(peca.getColuna() + 1);
+		pos.setarValores(posicao.getLinha(), posicao.getColuna() + 1);
+		while (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
+			pos.setColuna(pos.getColuna() + 1);
 		}
 
-		if (getTabuleiro().posicaoExiste(peca) && existeAquiUmaPecaAdversaria(peca)) {
-			matriz[peca.getLinha()][peca.getColuna()] = true;
+		if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+			matriz[pos.getLinha()][pos.getColuna()] = true;
 		}
 
 		return matriz;

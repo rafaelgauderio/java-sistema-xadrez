@@ -24,7 +24,7 @@ public class Program {
 			try {
 				
 				InterfaceDoUsuario.limparTela();
-				InterfaceDoUsuario.imprimirTabuleiro(partidaDeXadrez.getPecas());
+				InterfaceDoUsuario.imprimirPartida(partidaDeXadrez);
 				System.out.println();
 				System.out.println("Origem: ");
 				PosicaoNoXadrez origem = InterfaceDoUsuario.lerPosicaoNoXadrez(sc);

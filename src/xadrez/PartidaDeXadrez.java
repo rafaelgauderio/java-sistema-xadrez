@@ -9,13 +9,26 @@ import xadrez.pecas.Torre;
 //Classe onde ficam as regras do jogo de Xadrez
 public class PartidaDeXadrez {
 
+	private int turno;
+	private Cor jogadorDaVez;
 	private Tabuleiro tabuleiro;
 
 	public PartidaDeXadrez() {
 
 		tabuleiro = new Tabuleiro(8, 8);
+		turno = 1;
+		// No Xadrez começa sempre as peças BRANCAS
+		jogadorDaVez = Cor.BRANCO;
 		FormacaoInicial();
 
+	}
+
+	public int getTurno() {
+		return turno;
+	}
+
+	public Cor getJogadorDaVez() {
+		return jogadorDaVez;
 	}
 
 	public PecaDeXadrez[][] getPecas() {
@@ -41,6 +54,7 @@ public class PartidaDeXadrez {
 		validarPosicaoOrigem(origem);
 		validarPosicaoDestino(origem, destino);
 		Peca pecaCapturada = realizarMovimento(origem, destino);
+		proximoTurno();
 
 		return (PecaDeXadrez) pecaCapturada;
 	}
@@ -54,8 +68,14 @@ public class PartidaDeXadrez {
 
 	private void validarPosicaoOrigem(Posicao posicao) {
 		if (!tabuleiro.jaTemUmaPeca(posicao)) {
-			throw new ExcecaoDoXadrez("Ainda não há peça nessa posição!");
+			throw new ExcecaoDoXadrez("Não há peça nessa posição!");
 
+		}
+		
+		if (jogadorDaVez != ((PecaDeXadrez)tabuleiro.peca(posicao)).getCor()   ) {
+			
+			throw new ExcecaoDoXadrez ("A peça escolhida não é sua. Escolha uma peça: " + (jogadorDaVez == Cor.BRANCO ? Cor.BRANCO : Cor.PRETO) );
+			
 		}
 
 		if (!tabuleiro.peca(posicao).existeAlgumMovimentoPossivel()) {
@@ -69,6 +89,12 @@ public class PartidaDeXadrez {
 			throw new ExcecaoDoXadrez("A peça escolhida não pode se movimentar para essa posição de destino");
 		}
 	}
+	
+	private void proximoTurno () {
+		turno++;
+		jogadorDaVez = (jogadorDaVez == Cor.BRANCO) ? Cor.PRETO : Cor.BRANCO;
+	}
+	
 
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
 		tabuleiro.lugarDaPeca(peca, new PosicaoNoXadrez(coluna, linha).ParaPosicaoDoXadrez());
