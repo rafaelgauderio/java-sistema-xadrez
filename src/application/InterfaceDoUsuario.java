@@ -66,6 +66,9 @@ public class InterfaceDoUsuario {
 
 		System.out.println("Turno : " + partidaDeXadrez.getTurno());
 		System.out.println("Aguardando jogador: " + partidaDeXadrez.getJogadorDaVez());
+		if (partidaDeXadrez.getXeque() == true) {
+			System.out.println("XEQUE! PEGIGO! proteja seu Rei");
+		}
 	}
 
 	public static void imprimirTabuleiro(PecaDeXadrez[][] pecas) {

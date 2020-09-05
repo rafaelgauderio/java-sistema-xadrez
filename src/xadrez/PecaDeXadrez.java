@@ -3,6 +3,7 @@ package xadrez;
 import tabuleiroJogo.Tabuleiro;
 import tabuleiroJogo.Peca;
 import tabuleiroJogo.Posicao;
+import xadrez.PosicaoNoXadrez;
 
 public abstract class PecaDeXadrez extends Peca {
 
@@ -16,6 +17,11 @@ public abstract class PecaDeXadrez extends Peca {
 
 	public Cor getCor() {
 		return cor;
+	}
+	
+	//pegar a posicao(em matriz) converter para PosicaoNoXadrez ( letra e numero)
+	public PosicaoNoXadrez getPosicaoDeXadrez() {
+		return PosicaoNoXadrez.daPosicaoDoXadrez(posicao);
 	}
 
 	protected boolean existeAquiUmaPecaAdversaria(Posicao posicao) {

@@ -7,6 +7,7 @@ import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //Classe onde ficam as regras do jogo de Xadrez
 public class PartidaDeXadrez {
@@ -14,6 +15,8 @@ public class PartidaDeXadrez {
 	private int turno;
 	private Cor jogadorDaVez;
 	private Tabuleiro tabuleiro;
+	private boolean xeque;
+
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
 
@@ -23,6 +26,8 @@ public class PartidaDeXadrez {
 		turno = 1;
 		// No Xadrez começa sempre as peças BRANCAS
 		jogadorDaVez = Cor.BRANCO;
+		// por padrao uma propriedade boleana recebe falso
+		xeque = false;
 		FormacaoInicial();
 
 	}
@@ -33,6 +38,10 @@ public class PartidaDeXadrez {
 
 	public Cor getJogadorDaVez() {
 		return jogadorDaVez;
+	}
+	
+	public boolean getXeque () {
+		return xeque;
 	}
 
 	public PecaDeXadrez[][] getPecas() {
@@ -46,18 +55,29 @@ public class PartidaDeXadrez {
 	}
 
 	public boolean[][] movimentosPossiveis(PosicaoNoXadrez posicaoOrigem) {
-		Posicao posicao = posicaoOrigem.ParaPosicaoDoXadrez();
+		Posicao posicao = posicaoOrigem.paraPosicaoDoXadrez();
 		validarPosicaoOrigem(posicao);
 		return tabuleiro.peca(posicao).movimentosPossiveis();
 
 	}
 
 	public PecaDeXadrez realizarMovimentoDeXadrez(PosicaoNoXadrez posicaoOrigem, PosicaoNoXadrez posicaoDestino) {
-		Posicao origem = posicaoOrigem.ParaPosicaoDoXadrez();
-		Posicao destino = posicaoDestino.ParaPosicaoDoXadrez();
+		Posicao origem = posicaoOrigem.paraPosicaoDoXadrez();
+		Posicao destino = posicaoDestino.paraPosicaoDoXadrez();
 		validarPosicaoOrigem(origem);
 		validarPosicaoDestino(origem, destino);
 		Peca pecaCapturada = realizarMovimento(origem, destino);
+
+		// Jogador nao pode se colocar em Xeque e nem deixar de se defender de um xeque
+
+		if (TesteXeque(jogadorDaVez) == true) {
+			desfazerMovimento(origem, destino, pecaCapturada);
+			throw new ExcecaoDoXadrez("Tu não podes se colocar em XEQUE e nem deixar de se defender de um XEQUE!");
+		}
+		// se a cor do oponente do jogador da vez estiver em XEQUE, a partidade estara
+		// em xeque
+		xeque = (TesteXeque(corDoOponente(jogadorDaVez)) ? true : false);
+
 		proximoTurno();
 
 		return (PecaDeXadrez) pecaCapturada;
@@ -74,6 +94,26 @@ public class PartidaDeXadrez {
 		}
 
 		return pecaCapturada;
+	}
+
+	// metodo de desfazer o movimento, caso a pessoa tentar se colocar em Xeque, ou
+	// nao se defender de um ataque
+	// que a coloque em Xeque. Tem que desfazer toda o metodo de realziar moviment
+	// 1 - remover da posicao destino, 2 - colocar na posicao origem 3 - se tiver
+	// captudaro alguma peca; tirar da lista
+	// de pecas capturadas e inserir de volta na lista das pecas do tabuleiro
+
+	private void desfazerMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
+		Peca peca = tabuleiro.removerPeca(destino);
+		tabuleiro.lugarDaPeca(peca, origem);
+
+		if (pecaCapturada != null) {
+			tabuleiro.lugarDaPeca(pecaCapturada, destino);
+			pecasCapturadas.remove(pecaCapturada);
+			pecasNoTabuleiro.add(pecaCapturada);
+
+		}
+
 	}
 
 	private void validarPosicaoOrigem(Posicao posicao) {
@@ -106,8 +146,49 @@ public class PartidaDeXadrez {
 		jogadorDaVez = (jogadorDaVez == Cor.BRANCO) ? Cor.PRETO : Cor.BRANCO;
 	}
 
+	// metodo que retorna a cor da peca do oponente, para caso for um rei do
+	// adversario, declarar o xeque
+
+	private Cor corDoOponente(Cor cor) {
+		return (cor == Cor.BRANCO) ? cor.PRETO : cor.BRANCO;
+	}
+
+	// Peca nao tem cor, o que tem cor é a peça de Xadrez, tem que fazer downcasting
+	// no filtro da expressao lambda
+	private PecaDeXadrez CorDoRei(Cor cor) {
+		List<Peca> lista = pecasNoTabuleiro.stream().filter(x -> ((PecaDeXadrez) x).getCor() == cor)
+				.collect(Collectors.toList());
+		for (Peca peca : lista) {
+			if (peca instanceof Rei) {
+				return (PecaDeXadrez) peca;
+			}
+		}
+		// Nem tratar esse excacao, pois se acontecer significa que o programa está
+		// quebrando
+		throw new IllegalStateException("Nao existe Rei dessa " + cor + " no tabuleoro!");
+	}
+
+	// Se o teste de Xeque der verdadeiro significa que o Rei está em Xeque, o
+	// jogador em xeque
+	// é obrigad a defender esse Rei
+
+	private boolean TesteXeque(Cor cor) {
+		Posicao PosicaoDoRei = CorDoRei(cor).getPosicaoDeXadrez().paraPosicaoDoXadrez();
+		List<Peca> pecasDoOponente = pecasNoTabuleiro.stream()
+				.filter(x -> ((PecaDeXadrez) x).getCor() == corDoOponente(cor)).collect(Collectors.toList());
+		for (Peca peca : pecasDoOponente) {
+			boolean[][] matriz = peca.movimentosPossiveis();
+			if (matriz[PosicaoDoRei.getLinha()][PosicaoDoRei.getColuna()]) {
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
-		tabuleiro.lugarDaPeca(peca, new PosicaoNoXadrez(coluna, linha).ParaPosicaoDoXadrez());
+		tabuleiro.lugarDaPeca(peca, new PosicaoNoXadrez(coluna, linha).paraPosicaoDoXadrez());
 		pecasNoTabuleiro.add(peca);
 
 	}

@@ -29,12 +29,16 @@ public class PosicaoNoXadrez {
 
 	// LinhaDoChadrez = 8 - LinhaDaMatriz - 8 - 0 = 8 8 - 1 = 7
 	// ColunaDoChadrez = colunaDaMatriz - 'a'; 'b' - 'a' = 1
-	protected Posicao ParaPosicaoDoXadrez() {
+	
+	//para Posicao De Xadrez a partir de uma posicao de matriz
+	protected Posicao paraPosicaoDoXadrez() {
 		return new Posicao(8 - linha, coluna - 'a');
 	}
-
-	protected static PosicaoNoXadrez DaPosicaoDoXadre(Posicao posicao) {
-		return new PosicaoNoXadrez((char) ('a' - posicao.getColuna()), 8 - posicao.getLinha());
+	
+	//da posicao de Xadrez para a posicao de matriz
+	protected static PosicaoNoXadrez daPosicaoDoXadrez(Posicao posicao) {
+		// pego tipo um a8 e converto para 00, b7 == 11
+		return new PosicaoNoXadrez((char) ('a' + posicao.getColuna()), 8 - posicao.getLinha());
 	}
 
 	@Override
