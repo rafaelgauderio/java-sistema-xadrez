@@ -65,10 +65,19 @@ public class InterfaceDoUsuario {
 		System.out.println();
 
 		System.out.println("Turno : " + partidaDeXadrez.getTurno());
-		System.out.println("Aguardando jogador: " + partidaDeXadrez.getJogadorDaVez());
-		if (partidaDeXadrez.getXeque() == true) {
-			System.out.println("XEQUE! PEGIGO! proteja seu Rei");
+
+		if (!partidaDeXadrez.getXequemate() == true) {
+			System.out.println("Aguardando jogador: " + partidaDeXadrez.getJogadorDaVez());
+			if (partidaDeXadrez.getXeque() == true) {
+				System.out.println("XEQUE! PEGIGO! proteja seu Rei");
+			}
+
+		} else {
+			System.out.println("XEQUEMATE! GAME OVER");
+			System.out.println("O vencedor da partida foi o jogador " + partidaDeXadrez.getJogadorDaVez());
+			System.out.println("Acima o tabuleiro impresso do jogo finalizado");
 		}
+
 	}
 
 	public static void imprimirTabuleiro(PecaDeXadrez[][] pecas) {
@@ -79,7 +88,8 @@ public class InterfaceDoUsuario {
 			for (int j = 0; j < pecas.length; j++) {
 				imprimirPeca(pecas[i][j], false);
 			}
-			System.out.println();
+			System.out.println("\n");
+
 		}
 
 		System.out.println("   a   b   c   d   e   f   g   h  ");
@@ -87,12 +97,14 @@ public class InterfaceDoUsuario {
 	}
 
 	public static void imprimirTabuleiro(PecaDeXadrez[][] pecas, boolean[][] movimentosPossiveis) {
+		System.out.println();
+
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print((8 - i) + " ");
 			for (int j = 0; j < pecas.length; j++) {
 				imprimirPeca(pecas[i][j], movimentosPossiveis[i][j]);
 			}
-			System.out.println();
+			System.out.println("\n");
 		}
 
 		System.out.println("   a   b   c   d   e   f   g   h  ");

@@ -23,7 +23,7 @@ public class Program {
 		PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez();
 		List<PecaDeXadrez> capturada = new ArrayList<PecaDeXadrez>();
 
-		while (true) {
+		while (partidaDeXadrez.getXequemate() == false) {
 			try {
 
 				InterfaceDoUsuario.limparTela();
@@ -60,6 +60,8 @@ public class Program {
 			}
 
 		}
+		InterfaceDoUsuario.limparTela();
+		InterfaceDoUsuario.imprimirPartida(partidaDeXadrez, capturada);
 
 	}
 }

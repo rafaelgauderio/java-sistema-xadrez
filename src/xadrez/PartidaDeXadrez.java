@@ -16,6 +16,7 @@ public class PartidaDeXadrez {
 	private Cor jogadorDaVez;
 	private Tabuleiro tabuleiro;
 	private boolean xeque;
+	private boolean xequeMate;
 
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -28,6 +29,7 @@ public class PartidaDeXadrez {
 		jogadorDaVez = Cor.BRANCO;
 		// por padrao uma propriedade boleana recebe falso
 		xeque = false;
+		xequeMate = false;
 		FormacaoInicial();
 
 	}
@@ -39,9 +41,13 @@ public class PartidaDeXadrez {
 	public Cor getJogadorDaVez() {
 		return jogadorDaVez;
 	}
-	
-	public boolean getXeque () {
+
+	public boolean getXeque() {
 		return xeque;
+	}
+
+	public boolean getXequemate() {
+		return xequeMate;
 	}
 
 	public PecaDeXadrez[][] getPecas() {
@@ -78,7 +84,14 @@ public class PartidaDeXadrez {
 		// em xeque
 		xeque = (TesteXeque(corDoOponente(jogadorDaVez)) ? true : false);
 
-		proximoTurno();
+		// testar se teve um xequemate, antes de chamar a proxima jogada
+		if (testeDeXequeMate(corDoOponente(jogadorDaVez)) == true) {
+			xequeMate = true;
+		}
+
+		else {
+			proximoTurno();
+		}
 
 		return (PecaDeXadrez) pecaCapturada;
 	}
@@ -185,6 +198,43 @@ public class PartidaDeXadrez {
 		}
 
 		return false;
+	}
+
+	private boolean testeDeXequeMate(Cor cor) {
+		// Senao está nem em xeque, muito menos está em xequemate
+		if (!TesteXeque(cor) == true) {
+			return false;
+		}
+		// fazer uma lista de todas as pecas e depois percorrer toda essa lista testando
+		// todos os movimentos possiveis dessas pestas,
+		// testando se nenhum desses movimentos tira o rei do xeque. Ao testar esses
+		// movimentos que nao tirararam do xeque, desfazer
+		// toda essa movimentocao para nao bagunca o tabuleiro. Se algum movimento
+		// possivel tirar do xequemate, é apenas um xeque;
+		// se nenhum movimento tirar, declarar o xeque mate.
+		List<Peca> lista = pecasNoTabuleiro.stream().filter(x -> ((PecaDeXadrez) x).getCor() == cor)
+				.collect(Collectors.toList());
+		for (Peca peca : lista) {
+			boolean[][] matriz = peca.movimentosPossiveis();
+			for (int i = 0; i < tabuleiro.getLinhas(); i++) {
+				for (int j = 0; j < tabuleiro.getColunas(); j++) {
+					if (matriz[i][j]) {
+						Posicao origem = ((PecaDeXadrez) peca).getPosicaoDeXadrez().paraPosicaoDoXadrez();
+						Posicao destino = new Posicao(i, j);
+						Peca pecaCapturada = realizarMovimento(origem, destino);
+						boolean testeXeque = TesteXeque(cor);
+						desfazerMovimento(origem, destino, pecaCapturada);
+						if (!testeXeque == true) {
+							return false;
+						}
+
+					}
+				}
+			}
+			return true;
+		}
+
+		return xequeMate;
 	}
 
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {
