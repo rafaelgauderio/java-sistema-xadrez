@@ -150,4 +150,10 @@ public class InterfaceDoUsuario {
 
 	}
 
+	public static void imprimirContagemDeJogadas() {
+		System.out.println("Jogadas BRANCO: " + ((PecaDeXadrez.getContarMovimentos())/2) + " , Jogadas PRETOS: "
+				+ (((PecaDeXadrez.getContarMovimentos())- 1)/2));
+
+	}
+
 }

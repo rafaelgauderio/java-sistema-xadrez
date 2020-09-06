@@ -34,7 +34,7 @@ public class Program {
 
 				boolean[][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
 				InterfaceDoUsuario.limparTela();
-				// sobrecarga do do metodo de imprimir o tabuleiro, mas agora com todas as
+				// sobrecarga do metodo de imprimir o tabuleiro, mas agora com todas as
 				// possicoes possiveis e com o fundo colorido
 				InterfaceDoUsuario.imprimirTabuleiro(partidaDeXadrez.getPecas(), movimentosPossiveis);
 				System.out.println();

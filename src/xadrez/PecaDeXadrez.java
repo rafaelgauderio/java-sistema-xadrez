@@ -8,7 +8,9 @@ import xadrez.PosicaoNoXadrez;
 public abstract class PecaDeXadrez extends Peca {
 
 	private Cor cor;
-
+	private static int contarMovimentos=0;
+	
+	
 	public PecaDeXadrez(Tabuleiro tabuleiro, Cor cor) {
 		super(tabuleiro);
 		this.cor = cor;
@@ -18,6 +20,19 @@ public abstract class PecaDeXadrez extends Peca {
 	public Cor getCor() {
 		return cor;
 	}
+	
+	public static int getContarMovimentos() {
+		return contarMovimentos;
+	}
+	
+	public void aumentarContagem() {
+		contarMovimentos++;
+	}
+	
+	public void dimunirContagem() {
+		contarMovimentos--;
+	}
+	
 	
 	//pegar a posicao(em matriz) converter para PosicaoNoXadrez ( letra e numero)
 	public PosicaoNoXadrez getPosicaoDeXadrez() {
@@ -29,5 +44,6 @@ public abstract class PecaDeXadrez extends Peca {
 		// vai ser uma peça adversária se não for nula e ser de uma cor diferente
 		return peca != null && peca.getCor() != cor;
 	}
+	
 
 }
