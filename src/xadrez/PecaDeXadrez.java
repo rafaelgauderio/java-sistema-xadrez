@@ -8,7 +8,7 @@ import xadrez.PosicaoNoXadrez;
 public abstract class PecaDeXadrez extends Peca {
 
 	private Cor cor;
-	private static int contarMovimentos=0;
+	private int contarMovimentos=0;
 	
 	
 	public PecaDeXadrez(Tabuleiro tabuleiro, Cor cor) {
@@ -21,7 +21,7 @@ public abstract class PecaDeXadrez extends Peca {
 		return cor;
 	}
 	
-	public static int getContarMovimentos() {
+	public int getContarMovimentos() {
 		return contarMovimentos;
 	}
 	

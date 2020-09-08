@@ -3,6 +3,7 @@ package xadrez;
 import tabuleiroJogo.Tabuleiro;
 import tabuleiroJogo.Posicao;
 import tabuleiroJogo.Peca;
+import xadrez.pecas.Peao;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 import java.util.ArrayList;
@@ -249,16 +250,30 @@ public class PartidaDeXadrez {
 
 	public void FormacaoInicial() {
 
-		lugarNovoPeca('b', 6, new Torre(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('a', 1, new Torre(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('e', 1, new Rei(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('g', 1, new Torre(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('c', 2, new Torre(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('c', 3, new Torre(tabuleiro, Cor.BRANCO));
-
+		lugarNovoPeca('h', 1, new Torre(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('a', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('b', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('c', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('d', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('e', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('f', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('g', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('h', 2, new Peao(tabuleiro, Cor.BRANCO));
+		
+		lugarNovoPeca('a', 8, new Torre(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('e', 8, new Rei(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('c', 8, new Torre(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('b', 8, new Torre(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('h', 3, new Torre(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('h', 8, new Torre(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('a', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('b', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('c', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('d', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('e', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('f', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('g', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('h', 7, new Peao(tabuleiro, Cor.PRETO));
+		
 
 		/*
 		 * Para poder imprimir o console colorido abre um git bash na pasta bin do
