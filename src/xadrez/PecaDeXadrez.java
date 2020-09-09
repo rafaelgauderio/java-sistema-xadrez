@@ -8,7 +8,7 @@ import xadrez.PosicaoNoXadrez;
 public abstract class PecaDeXadrez extends Peca {
 
 	private Cor cor;
-	private int contarMovimentos=0;
+	private int contarMovimentos;
 	
 	
 	public PecaDeXadrez(Tabuleiro tabuleiro, Cor cor) {
@@ -31,6 +31,33 @@ public abstract class PecaDeXadrez extends Peca {
 	
 	public void dimunirContagem() {
 		contarMovimentos--;
+	}
+	
+	public int contarMovimentosBranco(int brancos) {
+
+		if (contarMovimentos == 0) {
+			brancos = 0;
+		} else {
+			if (contarMovimentos % 2 == 1) {
+				brancos = (contarMovimentos / 2) + 1;
+			} else {
+				brancos = (contarMovimentos / 2);
+			}
+
+		}
+
+		return brancos;
+	}
+
+	public int contarMovimentosPreto(int pretos) {
+		if (contarMovimentos == 0 || contarMovimentos == 1) {
+			pretos = 0;
+		} else {
+			pretos = contarMovimentos / 2;
+
+		}
+
+		return pretos;
 	}
 	
 	

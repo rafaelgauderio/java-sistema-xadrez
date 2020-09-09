@@ -116,7 +116,7 @@ public class InterfaceDoUsuario {
 		// mostrar ser um movimento
 		// possivel da peca
 		if (corDeFundo) {
-			System.out.print(ANSI_PURPLE_BACKGROUND);
+			System.out.print(ANSI_RED_BACKGROUND);
 		}
 
 		if (peca == null) {
@@ -147,10 +147,6 @@ public class InterfaceDoUsuario {
 		System.out.println("Pretas: ");
 		System.out.println(Arrays.toString(pretas.toArray()));
 		System.out.print(ANSI_RESET);
-
-	}
-
-	public static void imprimirContagemDeJogadas() {
 
 	}
 

@@ -25,7 +25,7 @@ public class Program {
 
 		while (partidaDeXadrez.getXequemate() == false) {
 			try {
-
+				
 				InterfaceDoUsuario.limparTela();
 				InterfaceDoUsuario.imprimirPartida(partidaDeXadrez, capturada);
 				System.out.println();
