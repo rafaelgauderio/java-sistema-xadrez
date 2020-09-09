@@ -171,7 +171,7 @@ public class PartidaDeXadrez {
 	// adversario, declarar o xeque
 
 	private Cor corDoOponente(Cor cor) {
-		return (cor == Cor.BRANCO) ? cor.PRETO : cor.BRANCO;
+		return (cor == Cor.BRANCO) ? Cor.PRETO : cor.BRANCO;
 	}
 
 	// Peca nao tem cor, o que tem cor é a peça de Xadrez, tem que fazer downcasting
@@ -210,7 +210,7 @@ public class PartidaDeXadrez {
 
 	private boolean testeDeXequeMate(Cor cor) {
 		// Senao está nem em xeque, muito menos está em xequemate
-		if (!TesteXeque(cor) == true) {
+		if (!TesteXeque(cor)) {
 			return false;
 		}
 		// fazer uma lista de todas as pecas e depois percorrer toda essa lista testando
@@ -232,17 +232,16 @@ public class PartidaDeXadrez {
 						Peca pecaCapturada = realizarMovimento(origem, destino);
 						boolean testeXeque = TesteXeque(cor);
 						desfazerMovimento(origem, destino, pecaCapturada);
-						if (!testeXeque == true) {
+						if (!testeXeque) {
 							return false;
 						}
 
 					}
 				}
 			}
-			return true;
 		}
+		return true;
 
-		return xequeMate;
 	}
 
 	private void lugarNovoPeca(char coluna, int linha, PecaDeXadrez peca) {

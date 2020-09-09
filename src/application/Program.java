@@ -54,7 +54,7 @@ public class Program {
 				sc.nextLine();
 			} catch (InputMismatchException erro) {
 				System.out.println(erro.getMessage());
-				System.out.println("Pressione ENTER para continuar!");
+				System.out.println("ENTER para continuar!");
 				sc.nextLine();
 
 			}

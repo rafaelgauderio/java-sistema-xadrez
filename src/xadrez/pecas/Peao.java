@@ -16,57 +16,57 @@ public class Peao extends PecaDeXadrez {
 
 		boolean[][] matriz = new boolean[getTabuleiro().getLinhas()][getTabuleiro().getColunas()];
 
-		Posicao pos1 = new Posicao(0, 0);
+		Posicao pos = new Posicao(0, 0);
 
 		// Peao se move para cima (-1), se branco; bara baixo (+1) se preto.
 		if (getCor() == Cor.BRANCO) {
-			pos1.setarValores(posicao.getLinha() - 1, posicao.getColuna());
-			if (getTabuleiro().posicaoExiste(pos1) && !getTabuleiro().jaTemUmaPeca(pos1)) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+			pos.setarValores(posicao.getLinha() - 1, posicao.getColuna());
+			if (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)) {
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
 			// Caso for o primeiro movimento, pode movimentar duas casas
-			pos1.setarValores(posicao.getLinha() - 2, posicao.getColuna());
+			pos.setarValores(posicao.getLinha() - 2, posicao.getColuna());
 			Posicao pos2 = new Posicao(posicao.getLinha() - 1, posicao.getColuna());
-			if (getTabuleiro().posicaoExiste(pos1) && !getTabuleiro().jaTemUmaPeca(pos1)
+			if (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)
 					&& getTabuleiro().posicaoExiste(pos2) && !getTabuleiro().jaTemUmaPeca(pos2)
 					&& getContarMovimentos() == 0) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
 
 			// Pecao captura peças pela diagonal para esquerda (-1) e direita (+1)
-			pos1.setarValores(posicao.getLinha() - 1, posicao.getColuna() - 1);
-			if (getTabuleiro().posicaoExiste(pos1) && existeAquiUmaPecaAdversaria(pos1)) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+			pos.setarValores(posicao.getLinha() - 1, posicao.getColuna() - 1);
+			if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
-			pos1.setarValores(posicao.getLinha() - 1, posicao.getColuna() + 1);
-			if (getTabuleiro().posicaoExiste(pos1) && existeAquiUmaPecaAdversaria(pos1)) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+			pos.setarValores(posicao.getLinha() - 1, posicao.getColuna() + 1);
+			if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
 		}
 
 		// Se for um peça preta
 		else {
-			pos1.setarValores(posicao.getLinha() + 1, posicao.getColuna());
-			if (getTabuleiro().posicaoExiste(pos1) && !getTabuleiro().jaTemUmaPeca(pos1)) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+			pos.setarValores(posicao.getLinha() + 1, posicao.getColuna());
+			if (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)) {
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
 			// Caso for o primeiro movimento, pode movimentar duas casas
-			pos1.setarValores(posicao.getLinha() + 2, posicao.getColuna());
+			pos.setarValores(posicao.getLinha() + 2, posicao.getColuna());
 			Posicao pos2 = new Posicao(posicao.getLinha() + 1, posicao.getColuna());
-			if (getTabuleiro().posicaoExiste(pos1) && !getTabuleiro().jaTemUmaPeca(pos1)
+			if (getTabuleiro().posicaoExiste(pos) && !getTabuleiro().jaTemUmaPeca(pos)
 					&& getTabuleiro().posicaoExiste(pos2) && !getTabuleiro().jaTemUmaPeca(pos2)
 					&& getContarMovimentos() == 0) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
 
 			// Pecao captura peças pela diagonal para esquerda (-1) e direita (+1)
-			pos1.setarValores(posicao.getLinha() + 1, posicao.getColuna() - 1);
-			if (getTabuleiro().posicaoExiste(pos1) && existeAquiUmaPecaAdversaria(pos1)) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+			pos.setarValores(posicao.getLinha() + 1, posicao.getColuna() - 1);
+			if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
-			pos1.setarValores(posicao.getLinha() + 1, posicao.getColuna() + 1);
-			if (getTabuleiro().posicaoExiste(pos1) && existeAquiUmaPecaAdversaria(pos1)) {
-				matriz[pos1.getLinha()][pos1.getColuna()] = true;
+			pos.setarValores(posicao.getLinha() + 1, posicao.getColuna() + 1);
+			if (getTabuleiro().posicaoExiste(pos) && existeAquiUmaPecaAdversaria(pos)) {
+				matriz[pos.getLinha()][pos.getColuna()] = true;
 			}
 		}
 

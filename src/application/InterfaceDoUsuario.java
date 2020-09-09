@@ -69,13 +69,13 @@ public class InterfaceDoUsuario {
 		if (!partidaDeXadrez.getXequemate() == true) {
 			System.out.println("Aguardando jogador: " + partidaDeXadrez.getJogadorDaVez());
 			if (partidaDeXadrez.getXeque() == true) {
-				System.out.println("XEQUE! PEGIGO! proteja seu Rei");
+				System.out.println(ANSI_PURPLE_BACKGROUND + "XEQUE! PERIGO! proteja seu Rei");
 			}
 
 		} else {
-			System.out.println("XEQUEMATE! GAME OVER");
+			System.out.println(ANSI_PURPLE_BACKGROUND + "XEQUEMATE! GAME OVER");
 			System.out.println("O vencedor da partida foi o jogador " + partidaDeXadrez.getJogadorDaVez());
-			System.out.println("Acima o tabuleiro impresso do jogo finalizado");
+
 		}
 
 	}
