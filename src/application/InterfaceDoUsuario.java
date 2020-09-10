@@ -140,11 +140,12 @@ public class InterfaceDoUsuario {
 		List<PecaDeXadrez> pretas = capturada.stream().filter(x -> x.getCor() == Cor.PRETO)
 				.collect(Collectors.toList());
 		System.out.println("Lista de pecas capturadas: ");
-		System.out.println("Brancas: ");
+		System.out.print("Brancas: ");
 		System.out.print(ANSI_WHITE);
 		System.out.println(Arrays.toString(brancas.toArray()));
-		System.out.println(ANSI_RESET);
-		System.out.println("Pretas: ");
+		System.out.print(ANSI_RESET);
+		System.out.print("Pretas: ");
+		System.out.print(ANSI_YELLOW);
 		System.out.println(Arrays.toString(pretas.toArray()));
 		System.out.print(ANSI_RESET);
 
