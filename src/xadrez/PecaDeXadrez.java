@@ -29,7 +29,7 @@ public abstract class PecaDeXadrez extends Peca {
 		contarMovimentos++;
 	}
 	
-	public void dimunirContagem() {
+	public void diminuirContagem() {
 		contarMovimentos--;
 	}
 	

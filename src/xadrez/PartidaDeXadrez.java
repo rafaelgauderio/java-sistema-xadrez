@@ -21,6 +21,11 @@ public class PartidaDeXadrez {
 	private Tabuleiro tabuleiro;
 	private boolean xeque;
 	private boolean xequeMate;
+	// variavel se a peça tem chance de tomar o en Passant
+	// A captura en passant deve ser feita IMEDIATAMENTE apos o peai ter movido por duas casas, caso contratio o jogador
+	// adversario perde o direito de fazer o en passant. Consiste no unico movimento no Xadrez em que a peca que captura nao
+	// sera movida ara a casa ocupada pela peca capturada
+	private PecaDeXadrez vunerabilidadeEnPassant;
 
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -54,6 +59,10 @@ public class PartidaDeXadrez {
 		return xequeMate;
 	}
 
+	public PecaDeXadrez getVunerabilidadeEnPassant() {
+		return vunerabilidadeEnPassant;
+	}
+
 	public PecaDeXadrez[][] getPecas() {
 		PecaDeXadrez[][] matriz = new PecaDeXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
 		for (int i = 0; i < tabuleiro.getLinhas(); i++) {
@@ -82,9 +91,11 @@ public class PartidaDeXadrez {
 
 		if (TesteXeque(jogadorDaVez) == true) {
 			desfazerMovimento(origem, destino, pecaCapturada);
-			throw new ExcecaoDoXadrez("Tu não podes se colocar em XEQUE e nem deixar de se defender de um XEQUE!");
+			throw new ExcecaoDoXadrez("Tu nao podes se colocar em XEQUE e nem deixar de se defender de um XEQUE!");
 		}
-		// se a cor do oponente do jogador da vez estiver em XEQUE, a partidade estara
+
+		PecaDeXadrez pecasMovimentadas = (PecaDeXadrez) tabuleiro.peca(destino);
+		// se a cor do oponente do jogador da vez estiver em XEQUE, a partidade estara//
 		// em xeque
 		xeque = (TesteXeque(corDoOponente(jogadorDaVez)) ? true : false);
 
@@ -95,6 +106,15 @@ public class PartidaDeXadrez {
 
 		else {
 			proximoTurno();
+		}
+
+		// # movimento especial en passant
+
+		if (pecasMovimentadas instanceof Peao
+				&& (destino.getLinha() == origem.getLinha() - 2 || destino.getLinha() == origem.getLinha() + 2)) {
+			vunerabilidadeEnPassant = pecasMovimentadas;
+		} else {
+			vunerabilidadeEnPassant = null;
 		}
 
 		return (PecaDeXadrez) pecaCapturada;
@@ -119,7 +139,7 @@ public class PartidaDeXadrez {
 			Posicao destinoTorre = new Posicao(origem.getLinha(), origem.getColuna() + 1);
 			PecaDeXadrez torre = (PecaDeXadrez) tabuleiro.removerPeca(origemTorre);
 			tabuleiro.lugarDaPeca(torre, destinoTorre);
-			torre.dimunirContagem();
+			torre.aumentarContagem();
 
 		}
 
@@ -130,8 +150,25 @@ public class PartidaDeXadrez {
 			Posicao destinoTorre = new Posicao(origem.getLinha(), origem.getColuna() - 1);
 			PecaDeXadrez torre = (PecaDeXadrez) tabuleiro.removerPeca(origemTorre);
 			tabuleiro.lugarDaPeca(torre, destinoTorre);
-			torre.dimunirContagem();
+			torre.aumentarContagem();
 
+		}
+
+		// # movimento especial el passant
+		if (peca instanceof Peao) {
+			if (origem.getColuna() != destino.getColuna() && pecaCapturada == null) {
+				Posicao posicaoPeao;
+				if (peca.getCor() == Cor.BRANCO) {
+					posicaoPeao = new Posicao(destino.getLinha() + 1, destino.getColuna());
+				} else {
+					posicaoPeao = new Posicao(destino.getLinha() - 1, destino.getColuna());
+				}
+
+				pecaCapturada = tabuleiro.removerPeca(posicaoPeao);
+				pecasCapturadas.add(pecaCapturada);
+				pecasNoTabuleiro.remove(pecaCapturada);
+
+			}
 		}
 
 		return pecaCapturada;
@@ -147,7 +184,7 @@ public class PartidaDeXadrez {
 	private void desfazerMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
 
 		PecaDeXadrez peca = (PecaDeXadrez) tabuleiro.removerPeca(destino);
-		peca.dimunirContagem();
+		peca.diminuirContagem();
 		tabuleiro.lugarDaPeca(peca, origem);
 
 		if (pecaCapturada != null) {
@@ -156,53 +193,70 @@ public class PartidaDeXadrez {
 			pecasNoTabuleiro.add(pecaCapturada);
 
 		}
-		
+
 		// # movimento Especial Roque pequeno = Lado do rei
-				if (peca instanceof Rei && destino.getColuna() == origem.getColuna()+ 2) {
+		if (peca instanceof Rei && destino.getColuna() == origem.getColuna() + 2) {
 
-					Posicao origemTorre = new Posicao(origem.getLinha(), origem.getColuna() + 3);
-					Posicao destinoTorre = new Posicao(origem.getLinha(), origem.getColuna() + 1);
-					PecaDeXadrez torre = (PecaDeXadrez) tabuleiro.removerPeca(destinoTorre);
-					tabuleiro.lugarDaPeca(torre, origemTorre);
-					torre.dimunirContagem();
+			Posicao origemTorre = new Posicao(origem.getLinha(), origem.getColuna() + 3);
+			Posicao destinoTorre = new Posicao(origem.getLinha(), origem.getColuna() + 1);
+			PecaDeXadrez torre = (PecaDeXadrez) tabuleiro.removerPeca(destinoTorre);
+			tabuleiro.lugarDaPeca(torre, origemTorre);
+			torre.diminuirContagem();
+
+		}
+
+		// # movimento Especial Roque grande = Lado da Rainha
+		if (peca instanceof Rei && destino.getColuna() == origem.getColuna() - 2) {
+
+			Posicao origemTorre = new Posicao(origem.getLinha(), origem.getColuna() - 4);
+			Posicao destinoTorre = new Posicao(origem.getLinha(), origem.getColuna() - 1);
+			PecaDeXadrez torre = (PecaDeXadrez) tabuleiro.removerPeca(destinoTorre);
+			tabuleiro.lugarDaPeca(torre, origemTorre);
+			torre.diminuirContagem();
+
+		}
+
+		// # movimento especial el passant
+		if (peca instanceof Peao) {
+			if (origem.getColuna() != destino.getColuna() && pecaCapturada == vunerabilidadeEnPassant) {
+				PecaDeXadrez peao = (PecaDeXadrez)tabuleiro.removerPeca(destino);
+				Posicao posicaoPeao;
+				if (peca.getCor() == Cor.BRANCO) {
+					posicaoPeao = new Posicao(3, destino.getColuna());
+				} else {
+					posicaoPeao = new Posicao(4, destino.getColuna());
 
 				}
 
-				// # movimento Especial Roque grande = Lado da Rainha
-				if (peca instanceof Rei && destino.getColuna() == origem.getColuna() - 2) {
+				tabuleiro.lugarDaPeca(peao, posicaoPeao);
 
-					Posicao origemTorre = new Posicao(origem.getLinha(), origem.getColuna() - 4);
-					Posicao destinoTorre = new Posicao(origem.getLinha(), origem.getColuna() - 1);
-					PecaDeXadrez torre = (PecaDeXadrez) tabuleiro.removerPeca(destinoTorre);
-					tabuleiro.lugarDaPeca(torre, origemTorre);
-					torre.dimunirContagem();
-
-				}
+			}
+		}
 
 	}
 
 	private void validarPosicaoOrigem(Posicao posicao) {
 		if (!tabuleiro.jaTemUmaPeca(posicao)) {
-			throw new ExcecaoDoXadrez("Não há peça nessa posição!");
+			throw new ExcecaoDoXadrez("Nao existe peca nessa posicao!");
 
 		}
 
 		if (jogadorDaVez != ((PecaDeXadrez) tabuleiro.peca(posicao)).getCor()) {
 
-			throw new ExcecaoDoXadrez("A peça escolhida não é sua. Escolha uma peça "
+			throw new ExcecaoDoXadrez("A peca escolhida nao lhe pertence! escolha um peca "
 					+ (jogadorDaVez == Cor.BRANCO ? Cor.BRANCO : Cor.PRETO));
 
 		}
 
 		if (!tabuleiro.peca(posicao).existeAlgumMovimentoPossivel()) {
-			throw new ExcecaoDoXadrez("Não exite nenhum movimento possível para essa peça!");
+			throw new ExcecaoDoXadrez("Nao exite nenhum movimento possivel para essa peca!");
 		}
 
 	}
 
 	private void validarPosicaoDestino(Posicao origem, Posicao destino) {
 		if (!tabuleiro.peca(origem).movimentoPossivel(destino)) {
-			throw new ExcecaoDoXadrez("A peça escolhida não pode se movimentar para essa posição de destino");
+			throw new ExcecaoDoXadrez("A peca escolhida nao pode se movimentar para essa posicao de destino");
 		}
 	}
 
@@ -230,7 +284,7 @@ public class PartidaDeXadrez {
 		}
 		// Nem tratar esse excacao, pois se acontecer significa que o programa está
 		// quebrando
-		throw new IllegalStateException("Nao existe Rei dessa " + cor + " no tabuleoro!");
+		throw new IllegalStateException("Nao existe Rei dessa " + cor + " no tabuleiro!");
 	}
 
 	// Se o teste de Xeque der verdadeiro significa que o Rei está em Xeque, o
@@ -304,14 +358,14 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('f', 1, new Bispo(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('g', 1, new Cavalo(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('h', 1, new Torre(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('a', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('b', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('c', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('d', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('e', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('f', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('g', 2, new Peao(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('h', 2, new Peao(tabuleiro, Cor.BRANCO));
+		lugarNovoPeca('a', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('b', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('c', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('d', 5, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('e', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('f', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('g', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('h', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 
 		lugarNovoPeca('a', 8, new Torre(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('b', 8, new Cavalo(tabuleiro, Cor.PRETO));
@@ -321,14 +375,14 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('f', 8, new Bispo(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('g', 8, new Cavalo(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('h', 8, new Torre(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('a', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('b', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('c', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('d', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('e', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('f', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('g', 7, new Peao(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('h', 7, new Peao(tabuleiro, Cor.PRETO));
+		lugarNovoPeca('a', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('b', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('c', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('d', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('e', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('f', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('g', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('h', 7, new Peao(tabuleiro, Cor.PRETO, this));
 
 		/*
 		 * Para poder imprimir o console colorido abre um git bash na pasta bin do
