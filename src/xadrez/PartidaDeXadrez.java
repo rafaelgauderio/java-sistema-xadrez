@@ -421,7 +421,7 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('f', 1, new Bispo(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('g', 1, new Cavalo(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('h', 1, new Torre(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('a', 6, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('a', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('b', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('c', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('d', 2, new Peao(tabuleiro, Cor.BRANCO, this));
@@ -438,7 +438,7 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('f', 8, new Bispo(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('g', 8, new Cavalo(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('h', 8, new Torre(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('a', 3, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('a', 7, new Peao(tabuleiro, Cor.PRETO, this));
 		lugarNovoPeca('b', 7, new Peao(tabuleiro, Cor.PRETO, this));
 		lugarNovoPeca('c', 7, new Peao(tabuleiro, Cor.PRETO, this));
 		lugarNovoPeca('d', 7, new Peao(tabuleiro, Cor.PRETO, this));
