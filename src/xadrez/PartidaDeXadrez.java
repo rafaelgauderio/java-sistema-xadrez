@@ -9,11 +9,13 @@ import xadrez.pecas.Peao;
 import xadrez.pecas.Rainha;
 import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//Classe onde ficam as regras do jogo de Xadrez
+//Classe onde ficam as regras do jogo de Xadrez.
+
 public class PartidaDeXadrez {
 
 	private int turno;
@@ -21,11 +23,19 @@ public class PartidaDeXadrez {
 	private Tabuleiro tabuleiro;
 	private boolean xeque;
 	private boolean xequeMate;
-	// variavel se a peça tem chance de tomar o en Passant
-	// A captura en passant deve ser feita IMEDIATAMENTE apos o peai ter movido por duas casas, caso contratio o jogador
-	// adversario perde o direito de fazer o en passant. Consiste no unico movimento no Xadrez em que a peca que captura nao
-	// sera movida ara a casa ocupada pela peca capturada
+	/*
+	 * variavel se a peça tem chance de tomar o en Passant A captura en passant deve
+	 * ser feita IMEDIATAMENTE apos o peai ter movido por duas casas, caso contratio
+	 * o jogador adversario perde o direito de fazer o en passant. Consiste no unico
+	 * movimento no Xadrez em que a peca que captura nao sera movida ara a casa
+	 * ocupada pela peca capturada
+	 */
 	private PecaDeXadrez vunerabilidadeEnPassant;
+	/*
+	 * variavel promocao. Quando um peao chega no fim do tabuleiro, ele pode ser
+	 * substituido por uma Rainha, Cavalo, Torre ou Bispo.
+	 */
+	private PecaDeXadrez promocao;
 
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -63,6 +73,10 @@ public class PartidaDeXadrez {
 		return vunerabilidadeEnPassant;
 	}
 
+	public PecaDeXadrez getPromocao() {
+		return promocao;
+	}
+
 	public PecaDeXadrez[][] getPecas() {
 		PecaDeXadrez[][] matriz = new PecaDeXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
 		for (int i = 0; i < tabuleiro.getLinhas(); i++) {
@@ -95,7 +109,20 @@ public class PartidaDeXadrez {
 		}
 
 		PecaDeXadrez pecasMovimentadas = (PecaDeXadrez) tabuleiro.peca(destino);
-		// se a cor do oponente do jogador da vez estiver em XEQUE, a partidade estara//
+
+		// movimento especial promocao do Peao
+		// Tem que testar se a promocao do peao por um peca mais poderosa, nao vai
+		// deixar o adversario em xeque
+		promocao = null;
+		if (pecasMovimentadas instanceof Peao) {
+			if ((pecasMovimentadas.getCor() == Cor.BRANCO && destino.getLinha() == 0
+					|| pecasMovimentadas.getCor() == Cor.PRETO && destino.getLinha() == 7)) {
+				promocao = (PecaDeXadrez) tabuleiro.peca(destino);
+				promocao = substituiPecaPromovida("RAI");
+			}
+		}
+
+		// se a cor do oponente do jogador da vez estiver em XEQUE, a partidade estara
 		// em xeque
 		xeque = (TesteXeque(corDoOponente(jogadorDaVez)) ? true : false);
 
@@ -118,6 +145,42 @@ public class PartidaDeXadrez {
 		}
 
 		return (PecaDeXadrez) pecaCapturada;
+	}
+
+	public PecaDeXadrez substituiPecaPromovida(String tipo) {
+
+		if (promocao == null) {
+			throw new IllegalStateException("Nao existe peca para ser promovida");
+
+		}
+
+		if (!tipo.equals("B") && !tipo.equals("C") && !tipo.equals("R") && !tipo.equals("T")) {
+			// throw new InvalidParameterException("Foi informada um opcao invalida");
+			return promocao;
+
+		}
+
+		Posicao pos = promocao.getPosicaoDeXadrez().paraPosicaoDoXadrez();
+		Peca peca = tabuleiro.removerPeca(pos);
+		pecasNoTabuleiro.remove(peca);
+
+		PecaDeXadrez novaPeca = novaPeca(tipo, promocao.getCor());
+		tabuleiro.lugarDaPeca(novaPeca, pos);
+		pecasNoTabuleiro.add(novaPeca);
+
+		return novaPeca;
+	}
+
+	private PecaDeXadrez novaPeca(String tipo, Cor cor) {
+		if (tipo.equals("B"))
+			return new Bispo(tabuleiro, cor);
+		if (tipo.equals("C"))
+			return new Cavalo(tabuleiro, cor);
+		if (tipo.equals("R"))
+			return new Rainha(tabuleiro, cor);
+
+		return new Torre(tabuleiro, cor);
+
 	}
 
 	private Peca realizarMovimento(Posicao origem, Posicao destino) {
@@ -219,7 +282,7 @@ public class PartidaDeXadrez {
 		// # movimento especial el passant
 		if (peca instanceof Peao) {
 			if (origem.getColuna() != destino.getColuna() && pecaCapturada == vunerabilidadeEnPassant) {
-				PecaDeXadrez peao = (PecaDeXadrez)tabuleiro.removerPeca(destino);
+				PecaDeXadrez peao = (PecaDeXadrez) tabuleiro.removerPeca(destino);
 				Posicao posicaoPeao;
 				if (peca.getCor() == Cor.BRANCO) {
 					posicaoPeao = new Posicao(3, destino.getColuna());
@@ -358,10 +421,10 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('f', 1, new Bispo(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('g', 1, new Cavalo(tabuleiro, Cor.BRANCO));
 		lugarNovoPeca('h', 1, new Torre(tabuleiro, Cor.BRANCO));
-		lugarNovoPeca('a', 2, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('a', 6, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('b', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('c', 2, new Peao(tabuleiro, Cor.BRANCO, this));
-		lugarNovoPeca('d', 5, new Peao(tabuleiro, Cor.BRANCO, this));
+		lugarNovoPeca('d', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('e', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('f', 2, new Peao(tabuleiro, Cor.BRANCO, this));
 		lugarNovoPeca('g', 2, new Peao(tabuleiro, Cor.BRANCO, this));
@@ -375,7 +438,7 @@ public class PartidaDeXadrez {
 		lugarNovoPeca('f', 8, new Bispo(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('g', 8, new Cavalo(tabuleiro, Cor.PRETO));
 		lugarNovoPeca('h', 8, new Torre(tabuleiro, Cor.PRETO));
-		lugarNovoPeca('a', 7, new Peao(tabuleiro, Cor.PRETO, this));
+		lugarNovoPeca('a', 3, new Peao(tabuleiro, Cor.PRETO, this));
 		lugarNovoPeca('b', 7, new Peao(tabuleiro, Cor.PRETO, this));
 		lugarNovoPeca('c', 7, new Peao(tabuleiro, Cor.PRETO, this));
 		lugarNovoPeca('d', 7, new Peao(tabuleiro, Cor.PRETO, this));

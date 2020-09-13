@@ -25,7 +25,7 @@ public class Program {
 
 		while (partidaDeXadrez.getXequemate() == false) {
 			try {
-				
+
 				InterfaceDoUsuario.limparTela();
 				InterfaceDoUsuario.imprimirPartida(partidaDeXadrez, capturada);
 				System.out.println();
@@ -45,6 +45,19 @@ public class Program {
 
 				if (pecaCapturada != null) {
 					capturada.add(pecaCapturada);
+				}
+
+				if (partidaDeXadrez.getPromocao() != null) {
+					System.out.println("Informe por qual tipo de peca tu quer subsituir o teu peao!");
+					System.out.println("R/B/C/T");
+					String pecaSubstituta = sc.nextLine().toUpperCase();
+					while (!pecaSubstituta.equals("R") && !pecaSubstituta.equals("B") && !pecaSubstituta.equals("C")
+							&& !pecaSubstituta.equals("T")) {
+						System.out.print("Valor invalido! Informe R/B/C/T: ");
+						pecaSubstituta = sc.nextLine().toUpperCase();
+					}
+					partidaDeXadrez.substituiPecaPromovida(pecaSubstituta);
+
 				}
 
 			} catch (ExcecaoDoXadrez erro) {
